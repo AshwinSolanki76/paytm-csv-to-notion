@@ -1,5 +1,7 @@
 import { Client } from "@notionhq/client";
 import pkg from "dotenv";
+import fs from "fs";
+
 const { dotenv } = pkg;
 pkg.config();
 
@@ -65,6 +67,18 @@ export async function addItem(row) {
 		fs.appendFile("./Errors.json", JSON.stringify(ErrorData, null, 2), "utf-8");
 	}
 }
+
+export async function saveDatatoFile() {
+	const res = await notion.databases.query({
+		database_id: databaseId,
+	});
+	fs.writeFileSync(
+		"./Data.json",
+		JSON.stringify(res.results, null, 2),
+		"utf-8"
+	);
+}
+
 export async function getSrNoToStartFrom() {
 	try {
 		const response = await notion.databases.query({
